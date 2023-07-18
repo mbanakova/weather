@@ -2,13 +2,10 @@
 	<div class="boforth">
 		<div class="wind__top">
 			<h3 class="city">Ветер:</h3>
-			<div class="wind__speed">{{ wind.speed.toFixed(1) }}м/с ({{ boforth.name }})</div>
+			<div class="wind__speed">{{ wind.speed.toFixed(1) }} м/с ({{ boforth.name }})</div>
 			<div class="wind__direction">
 				{{ getDirection(wind.deg) }}
-				<svg class="wind__arrow" id="Icons" :style="`transform: translateY(-50%) rotate(${wind.deg + 90}deg);`" viewBox="0 0 32 32" xml:space="preserve" fill="#ff0000">
-					<g><path d="M21,23c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l5.3-5.3l-5.3-5.3c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l6,6   c0.4,0.4,0.4,1,0,1.4l-6,6C21.5,22.9,21.3,23,21,23z" /></g>
-					<g><path d="M27,17H5c-0.6,0-1-0.4-1-1s0.4-1,1-1h22c0.6,0,1,0.4,1,1S27.6,17,27,17z" /></g>
-				</svg>
+				<ArrowSvg class="wind__arrow" :style="`transform: translateY(-50%) rotate(${wind.deg + 90}deg);`" />
 			</div>
 			<div class="wind__img">
 				<img :src="imageUrl" alt="" width="140" />
@@ -17,13 +14,17 @@
 		<p class="boforth__points">
 			<span class="points" :style="`background-color:${boforth.color2}`">{{ boforth.points }}</span> балла по шкале Бофорта
 		</p>
-		<div class="boforth__bar"><div class="boforth__level" :style="`width:${(boforth.points / 12) * 100}%;background-image: repeating-linear-gradient(-60deg, ${boforth.color}, ${boforth.color} 10px, ${boforth.color2} 10px, ${boforth.color2} 20px);`"></div></div>
+		<div class="boforth__bar">
+			<div class="boforth__level" :style="`width:${(boforth.points / 12) * 100}%;background-image: repeating-linear-gradient(-60deg, ${boforth.color}, ${boforth.color} 10px, ${boforth.color2} 10px, ${boforth.color2} 20px);`"></div>
+		</div>
 		<div class="boforth__earth">На суше: {{ boforth.descriptionEarth }}</div>
 		<div class="boforth__sea">На море: {{ boforth.descriptionSea }}</div>
 	</div>
 </template>
 
 <script setup>
+import ArrowSvg from './../assets/img/svg/ArrowSvg.vue'
+
 const props = defineProps(["boforth", "wind"]);
 const imageUrl = new URL(`/src/assets/img/Beaufort_scale_${props.boforth.points}.jpg`, import.meta.url).href;
 
@@ -62,6 +63,7 @@ function getDirection(deg) {
 		"speed img"
 		"direction img";
 }
+
 .wind__speed {
 	display: flex;
 	align-items: center;
@@ -86,6 +88,7 @@ function getDirection(deg) {
 	width: 25px;
 	height: 25px;
 	transform-origin: center;
+	fill: #9611c6;
 }
 
 .wind__img {
@@ -100,11 +103,13 @@ function getDirection(deg) {
 	flex-direction: column;
 	gap: 20px;
 }
+
 .boforth__bar {
 	width: 100%;
 	height: 40px;
 	background-color: #d8ecf3;
 	position: relative;
+	border-radius: 6px;
 }
 
 .boforth__level {
@@ -114,6 +119,7 @@ function getDirection(deg) {
 	position: absolute;
 	top: 0;
 	left: 0;
+	border-radius: 6px;
 }
 
 .boforth__points {

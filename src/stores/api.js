@@ -7,20 +7,25 @@ const APIKEY = 'fe0815010973f1c35df6ecd30041ee28'
 
 export const useApiStore = defineStore('api', () => {
   const apiData = reactive({})
-  const coords = ref({ lat: 0, lon: 0 })
+  // const coords = reactive({ lat: 0, lon: 0 })
 
-  const getCoords = async () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      coords.lat = position.coords.latitude.toFixed(4)
-      coords.lon = position.coords.longitude.toFixed(4)
-    }, error => {
-      console.log(error);
-    })
-  }
+  // const getCoords = async () => {
+  //   // const coords = { lat: 0, lon: 0 }
+  //   navigator.geolocation.getCurrentPosition((position) => {
+  //     coords.lat = position.coords.latitude.toFixed(4)
+  //     coords.lon = position.coords.longitude.toFixed(4)
+  //     console.log('coords ' + coords.lat)
+  //   }, error => {
+  //     console.log(error);
+  //   })
 
-  const getData = async () => {
+  //   getData()
+  // }
+
+  const getData = async (lat, lon) => {
+
     try {
-      const { data } = await axios(`https://api.openweathermap.org/data/2.5/weather?lat=55.899&lon=37.4427&lang=ru&appid=${APIKEY}`)
+      const { data } = await axios(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=ru&appid=${APIKEY}`)
       apiData.value = data
       return apiData.value
     } catch (error) {
@@ -28,9 +33,12 @@ export const useApiStore = defineStore('api', () => {
     }
   }
 
+  const getAirPressure = async () => {
+    return Math.round(apiData.value.main.pressure * 0.7500638)
+  }
+
   const getWindSpeed = async () => {
     return apiData.value.wind.speed
   }
-
-  return { apiData, getWindSpeed, getData }
+  return { apiData, getWindSpeed, getData, getAirPressure }
 })

@@ -1,9 +1,9 @@
 <template>
 	<div class="rain">
-		<p>Осадки за последние:</p>
+		<p>Недавние осадки:</p>
 		<ul class="rain__list">
 			<li v-for="(key, value) in rain" :key="key">
-				<span>{{ value }}</span> — <span>выпало {{ key }}</span> мм дождя
+				<span>{{ value === '1h' ? '1 час' : value === '3h' ? '3 часа' : '' }}</span> — <span>выпало {{ key }}</span> мм дождя
 			</li>
 		</ul>
 	</div>

@@ -134,12 +134,10 @@ export const useBoforthStore = defineStore('boforth', () => {
   }])
 
   const getBoforth = (speed) => { //3.15
-    console.log('скорость ветра ' + speed);
     let i = 0;
     while ((speed > boforth[i].maxSpeed)) {
       i++
     }
-    console.log(boforth[i]);
     return boforth[i]
   }
 
