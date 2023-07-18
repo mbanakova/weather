@@ -2,34 +2,34 @@
 	<TheHeader />
 	<div class="container">
 		<div class="weather">
-			<div class="weather__left">
+			<div class="weather__left" v-if="data.value">
 				<div class="weather-header">
-					<h3 class="city">{{ data.name }}</h3>
+					<h3 class="city">{{ data.value.name }}</h3>
 					<p class="time">Сейчас {{ timeNow }}, часовой пояс {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}</p>
 				</div>
 				<div class="weather-main">
-					<p class="temperature">{{ getCelsius(data.main.temp) }}&deg</p>
-					<div class="img"><img :src="`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`" /></div>
+					<p class="temperature">{{ getCelsius(data.value.main.temp) }}&deg</p>
+					<div class="img"><img :src="`https://openweathermap.org/img/wn/${data.value.weather[0].icon}@2x.png`" /></div>
 					<div class="feels-wrapper">
-						<p class="sky">{{ data.weather[0].description }}</p>
-						<p class="feels-like">ощущается как {{ getCelsius(data.main.feels_like) }}&deg</p>
+						<p class="sky">{{ data.value.weather[0].description }}</p>
+						<p class="feels-like">ощущается как {{ getCelsius(data.value.main.feels_like) }}&deg</p>
 					</div>
 				</div>
-				<Rain v-if="data.rain" :rain="data.rain" />
-				<Snow v-if="data.snow" :snow="data.snow" />
+				<Rain v-if="data.value.rain" :rain="data.value.rain" />
+				<Snow v-if="data.value.snow" :snow="data.value.snow" />
 				<div class="weather-info">
-					<p class="humidity">Влажность: {{ data.main.humidity }}%</p>
-					<p class="air-pressure">Давление: {{ Math.round(data.main.pressure * 0.7500638) }} мм рт. ст.</p>
-					<p class="air-clouds">Облачность: {{ data.clouds.all }}%</p>
-					<p class="air-observe">Видимость: {{ data.visibility / 1000 }} км</p>
+					<p class="humidity">Влажность: {{ data.value.main.humidity }}%</p>
+					<p class="air-pressure">Давление: {{ Math.round(data.value.main.pressure * 0.7500638) }} мм рт. ст.</p>
+					<p class="air-clouds">Облачность: {{ data.value.clouds.all }}%</p>
+					<p class="air-observe">Видимость: {{ data.value.visibility / 1000 }} км</p>
 				</div>
 				<div class="daylight">
-					<div class="sunrize">Восход {{ getTime(data.sys.sunrise) }}</div>
+					<div class="sunrize">Восход {{ getTime(data.value.sys.sunrise) }}</div>
 
-					<div class="sunset">Закат {{ getTime(data.sys.sunset) }}</div>
+					<div class="sunset">Закат {{ getTime(data.value.sys.sunset) }}</div>
 				</div>
 			</div>
-			<BoforthScale :boforth="boforth" :wind="data.wind" />
+			<BoforthScale v-if="boforth.value" :boforth="boforth.value" :wind="data.value.wind" />
 		</div>
 	</div>
 </template>
@@ -38,20 +38,27 @@ import TheHeader from "./components/TheHeader.vue";
 import Rain from "./components/Rain.vue";
 import Snow from "./components/Snow.vue";
 import BoforthScale from "./components/BoforthScale.vue";
-// import data from "./data.js";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, reactive } from "vue";
 import { useBoforthStore } from "./stores/boforth.js";
 import { useApiStore } from "./stores/api.js";
 const boforthStore = useBoforthStore();
 const apiStore = useApiStore();
 
-const data = ref([]);
-const boforth = ref([]);
+const data = ref({});
+const windSpeed = ref(0);
+const boforth = reactive({});
+
 onBeforeMount(async () => {
-	data.value = await apiStore.getData();
-	if (data.value) {
-		boforth.value = boforthStore.getBoforth(data.wind.speed);
-	}
+	await apiStore.getData();
+	data.value = apiStore.apiData
+	console.log(data.value);
+
+	await apiStore.getWindSpeed();
+	windSpeed.value = await apiStore.getWindSpeed();
+
+	boforth.value = boforthStore.getBoforth(windSpeed.value);
+	console.log('boforth is: ' + boforth.value);
+
 });
 
 const dateWithouthSecond = new Date();

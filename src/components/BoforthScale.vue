@@ -50,11 +50,6 @@ function getDirection(deg) {
 	const degree = Math.round(deg / 22.5) * 22.5;
 	return directions[degree];
 }
-
-console.log(getDirection(30));
-console.log(getDirection(10));
-console.log(getDirection(250));
-console.log(getDirection(320));
 </script>
 
 <style lang="scss" scoped>

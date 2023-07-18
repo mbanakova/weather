@@ -1,8 +1,8 @@
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useBoforthStore = defineStore('boforth', () => {
-  const boforth = ref([{
+  const boforth = reactive([{
     points: 0,
     name: "Штиль",
     maxSpeed: 0.2,
@@ -134,15 +134,14 @@ export const useBoforthStore = defineStore('boforth', () => {
   }])
 
   const getBoforth = (speed) => { //3.15
-    console.log(speed);
+    console.log('скорость ветра ' + speed);
     let i = 0;
-    while ((speed > boforth.value[i].maxSpeed)) {
+    while ((speed > boforth[i].maxSpeed)) {
       i++
     }
-    return boforth.value[i]
+    console.log(boforth[i]);
+    return boforth[i]
   }
-  // const getProductsList = (start, limit) => {
-  //   return products.value.slice(start, limit)
-  // }
+
   return { boforth, getBoforth }
 })
