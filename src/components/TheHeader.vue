@@ -1,6 +1,8 @@
 <template>
 	<header class="header">
-		<h1 class="page-title">Работает на данных API openweathermap</h1> <a href="https://openweathermap.org/api" target="blank"> <img src="./../assets/img/logo_api.png" width="90"></a>
+		<div class="wrapper header__wrapper">
+			<h1 class="page-title">Работает на данных API openweathermap</h1> <a href="https://openweathermap.org/api" target="blank"> <img src="./../assets/img/logo_api.png" width="90"></a>
+		</div>
 	</header>
 </template>
 
@@ -10,7 +12,9 @@
 .header {
 	background-color: #212e4e;
 	color: #ffffff;
-	padding: 20px;
+}
+
+.header__wrapper {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
@@ -21,6 +25,7 @@
 	margin: 0;
 	padding: 0;
 	visibility: hidden;
-
+	width: 0;
+	height: 0;
 }
 </style>

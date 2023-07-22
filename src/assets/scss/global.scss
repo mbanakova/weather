@@ -31,17 +31,20 @@ h6 {
 	flex-direction: column;
 }
 
-.container {
+.main {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	flex-grow: 1;
+	gap: 40px;
+}
+
+.wrapper {
 	max-width: 940px;
 	width: 100%;
 	padding: 20px;
 	margin: 0 auto;
-	gap: 40px;
 }
 
 .weather {

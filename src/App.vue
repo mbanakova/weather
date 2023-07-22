@@ -1,13 +1,8 @@
 <template>
 	<TheHeader />
-	<div class="container">
-		<div class="control-panel shadow">
-			<form class="search" @submit.prevent="getWeatherByCityName(location)">
-				<input class="input" type="text" placeholder="введите город, например, kishinev" v-model.trim="location">
-			</form>
-			<button @click="getCoords" class="button">get my location</button>
+	<main class="main wrapper">
+		<ControlPanel @user-submit="getWeatherByCityName" @getUserCoords="getCoords" />
 
-		</div>
 		<div class="weather shadow">
 			<div class="weather__left" v-if="data.value">
 				<div class="weather-header">
@@ -38,13 +33,14 @@
 			</div>
 			<BoforthScale v-if="boforth.value" :boforth="boforth.value" :wind="data.value.wind" />
 		</div>
-	</div>
+	</main>
 </template>
 <script setup>
 import TheHeader from "./components/TheHeader.vue";
 import Rain from "./components/Rain.vue";
 import Snow from "./components/Snow.vue";
 import BoforthScale from "./components/BoforthScale.vue";
+import ControlPanel from "./components/ControlPanel.vue";
 import { ref, reactive, computed, onMounted } from "vue";
 import { useBoforthStore } from "./stores/boforth.js";
 import { useApiStore } from "./stores/api.js";
@@ -111,25 +107,4 @@ const getTime = timestamp => {
 const getCelsius = temp => `${Math.round(temp - 273.15)}`;
 </script>
 <style scoped lang="scss">
-.control-panel {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 20px;
-	width: 100%;
-	padding: 20px 30px;
-}
-
-.search {
-	max-width: 400px;
-	width: 100%;
-}
-
-.input {
-	background-color: #fff;
-	border: 2px solid lighten(#257e93, 30%);
-	padding: 10px 15px;
-	border-radius: 6px;
-	width: 100%;
-}
 </style>
