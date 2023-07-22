@@ -33,21 +33,30 @@ h6 {
 
 .container {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	flex-grow: 1;
+	max-width: 940px;
+	width: 100%;
+	padding: 20px;
+	margin: 0 auto;
+	gap: 40px;
 }
 
 .weather {
 	display: flex;
 	gap: 40px;
 	padding: 30px;
-	border-radius: 6px;
-	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 
 	@media (max-width: 767px) {
 		flex-direction: column;
 	}
+}
+
+.shadow {
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+	border-radius: 6px;
 }
 
 .weather__left {

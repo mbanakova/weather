@@ -1,11 +1,17 @@
 <template>
 	<TheHeader />
-	<button class="button">get my location</button>
 	<div class="container">
-		<div class="weather">
+		<div class="control-panel shadow">
+			<form class="search" @submit.prevent="getWeatherByCityName(location)">
+				<input class="input" type="text" placeholder="введите город, например, kishinev" v-model.trim="location">
+			</form>
+			<button @click="getCoords" class="button">get my location</button>
+
+		</div>
+		<div class="weather shadow">
 			<div class="weather__left" v-if="data.value">
 				<div class="weather-header">
-					<h3 class="city">{{ data.value.name }}</h3>
+					<h3 class="city">{{ data.value.name }}, {{ data.value.sys.country }}</h3>
 					<p class="time">Сейчас {{ timeNow }},<br>часовой пояс {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}</p>
 				</div>
 				<div class="weather-main">
@@ -39,7 +45,7 @@ import TheHeader from "./components/TheHeader.vue";
 import Rain from "./components/Rain.vue";
 import Snow from "./components/Snow.vue";
 import BoforthScale from "./components/BoforthScale.vue";
-import { ref, onBeforeMount, reactive, computed, onMounted, watch } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { useBoforthStore } from "./stores/boforth.js";
 import { useApiStore } from "./stores/api.js";
 const boforthStore = useBoforthStore();
@@ -49,36 +55,46 @@ const data = ref({});
 const windSpeed = ref(0);
 const boforth = reactive({});
 const airPressure = ref(null)
-const coords = reactive({ lat: 0, lon: 0 })
-
-onBeforeMount(() => {
-
-	const getCoords = () => {
-		navigator.geolocation.getCurrentPosition(async (position) => {
-			coords.lat = position.coords.latitude.toFixed(4)
-			coords.lon = position.coords.longitude.toFixed(4)
-			console.log({ ...coords });
-		}, error => {
-			console.log(error);
-		})
-	}
-	getCoords()
-});
-
+const coords = reactive({ lat: 51.5085, lon: -0.1257 }) //london
+let location = ref('')
 
 onMounted(async () => {
-	setTimeout(async () => {
-		await apiStore.getData(coords.lat, coords.lon);
-		data.value = apiStore.apiData
-
-		await apiStore.getWindSpeed();
-		windSpeed.value = await apiStore.getWindSpeed();
-
-		boforth.value = await boforthStore.getBoforth(windSpeed.value);
-
-		airPressure.value = await apiStore.getAirPressure();
-	}), 800
+	await apiStore.getDataByCoords(coords.lat, coords.lon);
+	data.value = apiStore.apiData
+	calcData()
 })
+
+const getCoords = () => {
+	navigator.geolocation.getCurrentPosition(async (position) => {
+		coords.lat = position.coords.latitude.toFixed(4)
+		coords.lon = position.coords.longitude.toFixed(4)
+		console.log({ ...coords });
+		await apiStore.getDataByCoords(coords.lat, coords.lon);
+		data.value = apiStore.apiData
+		calcData()
+	}, error => {
+		console.log(error);
+	})
+}
+
+const getWeatherByCityName = async (city) => {
+	console.log(city);
+	await apiStore.getDataByCityName(city);
+
+	data.value = apiStore.apiData
+	calcData()
+	location.value = ''
+}
+
+const calcData = async () => {
+	await apiStore.getWindSpeed();
+	windSpeed.value = await apiStore.getWindSpeed();
+
+	boforth.value = boforthStore.getBoforth(windSpeed.value);
+
+	airPressure.value = await apiStore.getAirPressure();
+}
+
 
 const timeNow = computed(() => {
 	const dateWithouthSecond = new Date();
@@ -94,4 +110,26 @@ const getTime = timestamp => {
 
 const getCelsius = temp => `${Math.round(temp - 273.15)}`;
 </script>
-<style scoped></style>
+<style scoped lang="scss">
+.control-panel {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+	padding: 20px 30px;
+}
+
+.search {
+	max-width: 400px;
+	width: 100%;
+}
+
+.input {
+	background-color: #fff;
+	border: 2px solid lighten(#257e93, 30%);
+	padding: 10px 15px;
+	border-radius: 6px;
+	width: 100%;
+}
+</style>
