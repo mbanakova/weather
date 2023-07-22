@@ -2,12 +2,13 @@
 	<TheHeader />
 	<main class="main wrapper">
 		<ControlPanel @user-submit="getWeatherByCityName" @getUserCoords="getCoords" />
-
+		<!-- <pre>{{ data.value.timezone }}</pre> -->
 		<div class="weather shadow">
 			<div class="weather__left" v-if="data.value">
 				<div class="weather-header">
 					<h3 class="city">{{ data.value.name }}, {{ data.value.sys.country }}</h3>
-					<p class="time">Сейчас {{ timeNow }},<br>часовой пояс {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}</p>
+					<!-- <p class="time">Сейчас {{ timeNow }},<br>часовой пояс {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}</p> -->
+					<p class="time">Местное время: {{ localTime(data.value.dt, data.value.timezone) }},<br>Часовой пояс: GMT {{ getGMT(data.value.timezone) }}</p>
 				</div>
 				<div class="weather-main">
 					<p class="temperature">{{ getCelsius(data.value.main.temp) }}&deg</p>
@@ -26,9 +27,9 @@
 					<p class="air-observe">Видимость: {{ data.value.visibility / 1000 }} км</p>
 				</div>
 				<div class="daylight">
-					<div class="sunrize">Восход {{ getTime(data.value.sys.sunrise) }}</div>
+					<div class="sunrize">Восход {{ localTime(data.value.sys.sunrise, data.value.timezone) }}</div>
 
-					<div class="sunset">Закат {{ getTime(data.value.sys.sunset) }}</div>
+					<div class="sunset">Закат {{ localTime(data.value.sys.sunset, data.value.timezone) }}</div>
 				</div>
 			</div>
 			<BoforthScale v-if="boforth.value" :boforth="boforth.value" :wind="data.value.wind" />
@@ -51,8 +52,7 @@ const data = ref({});
 const windSpeed = ref(0);
 const boforth = reactive({});
 const airPressure = ref(null)
-const coords = reactive({ lat: 51.5085, lon: -0.1257 }) //london
-let location = ref('')
+const coords = reactive({ lat: 36.17497, lon: -115.13722 }) //Las Vegas
 
 onMounted(async () => {
 	await apiStore.getDataByCoords(coords.lat, coords.lon);
@@ -64,10 +64,10 @@ const getCoords = () => {
 	navigator.geolocation.getCurrentPosition(async (position) => {
 		coords.lat = position.coords.latitude.toFixed(4)
 		coords.lon = position.coords.longitude.toFixed(4)
-		console.log({ ...coords });
 		await apiStore.getDataByCoords(coords.lat, coords.lon);
 		data.value = apiStore.apiData
 		calcData()
+		console.log(data.value);
 	}, error => {
 		console.log(error);
 	})
@@ -79,7 +79,6 @@ const getWeatherByCityName = async (city) => {
 
 	data.value = apiStore.apiData
 	calcData()
-	location.value = ''
 }
 
 const calcData = async () => {
@@ -91,20 +90,23 @@ const calcData = async () => {
 	airPressure.value = await apiStore.getAirPressure();
 }
 
-
-const timeNow = computed(() => {
-	const dateWithouthSecond = new Date();
-	return dateWithouthSecond.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-})
-
-const getTime = timestamp => {
-	const date = new Date(timestamp * 1000);
-	const hours = date.getHours();
-	const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-	return `${hours}:${minutes}`;
-};
-
 const getCelsius = temp => `${Math.round(temp - 273.15)}`;
+
+const getGMT = timezone => (timezone / 3600 > 0 ? `+${timezone / 3600}` : `${timezone / 3600}`)
+
+const localTime = (timestamp, timezone) => {
+	const dateTime = new Date(timestamp * 1000);
+	const toUtc = dateTime.getTime() + dateTime.getTimezoneOffset() * 60000;
+	const currentLocalTime = toUtc + 1000 * timezone;
+	const selectedDate = new Date(currentLocalTime);
+
+	const hour = selectedDate.toLocaleString("en-GB", {
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+	});
+	return hour
+}
 </script>
 <style scoped lang="scss">
 </style>

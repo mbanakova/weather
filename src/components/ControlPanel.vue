@@ -9,12 +9,13 @@
 
 <script setup>
 import { ref } from "vue";
-let location = ref('')
+const location = ref('')
 
 const emit = defineEmits(["userSubmit", "getUserCoords"])
 
 const onSubmit = (city) => {
   emit('userSubmit', city)
+  location.value = ''
 }
 
 const getCoords = () => {
@@ -39,9 +40,16 @@ const getCoords = () => {
 
 .input {
   background-color: #fff;
-  border: 2px solid lighten(#257e93, 30%);
+  border: 2px solid #dfdfdf;
+  outline: none;
   padding: 10px 15px;
   border-radius: 6px;
   width: 100%;
+  transition: 0.3s all ease-in-out;
+}
+
+.input:focus {
+  border-color: #8eb6be;
+  background-color: #edf7f8;
 }
 </style>
