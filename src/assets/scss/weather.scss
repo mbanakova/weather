@@ -1,0 +1,66 @@
+.weather {
+  display: flex;
+  gap: 40px;
+  padding: 30px;
+  transition: $tr;
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+  }
+}
+
+.weather__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+  max-width: 450px;
+  width: 100%;
+}
+
+.city {
+  color: $accent;
+  font-size: 20px;
+  line-height: 120%;
+  margin: 0 0 5px;
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.temperature {
+  font-size: 50px;
+  font-weight: 700;
+  color: $grey;
+}
+
+.feels-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.img {
+  grid-area: img;
+}
+
+.sky {
+  grid-area: sky;
+}
+
+.daylight {
+  padding: 20px;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: $white;
+  background-image: linear-gradient(to right, rgb(255, 132, 0), rgb(6, 6, 93));
+  border-radius: 6px;
+}

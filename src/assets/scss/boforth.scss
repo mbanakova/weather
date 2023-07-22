@@ -32,7 +32,7 @@
   width: 25px;
   height: 25px;
   transform-origin: center;
-  fill: #9611c6;
+  fill: $bright;
 }
 
 .wind__img {
@@ -51,7 +51,7 @@
 .boforth__bar {
   width: 100%;
   height: 40px;
-  background-color: #d8ecf3;
+  background-color: $focus;
   position: relative;
   border-radius: 6px;
 }
@@ -77,5 +77,5 @@
   font-weight: 700;
   padding: 10px;
   border-radius: 6px;
-  color: white;
+  color: $white;
 }

@@ -16,7 +16,6 @@
 						<p class="feels-like">ощущается как {{ getCelsius(data.value.main.feels_like) }}&deg</p>
 					</div>
 				</div>
-				<Rain v-if="data.value.rain" :rain="data.value.rain" />
 				<Precipitations v-if="data.value.snow" :snow="data.value.snow" :type="precipitations.snow" />
 				<Precipitations v-if="data.value.rain" :snow="data.value.rain" :type="precipitations.rain" />
 				<div class="weather-info">

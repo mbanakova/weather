@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { createPinia } from 'pinia'
 const pinia = createPinia()
-import './assets/scss/global.scss'
+import './assets/scss/_global.scss'
 
 const app = createApp(App)
 
