@@ -1,5 +1,6 @@
 <template>
 	<TheHeader />
+	<button class="button">get my location</button>
 	<div class="container">
 		<div class="weather">
 			<div class="weather__left" v-if="data.value">
@@ -49,7 +50,6 @@ const windSpeed = ref(0);
 const boforth = reactive({});
 const airPressure = ref(null)
 const coords = reactive({ lat: 0, lon: 0 })
-const hasCoords = ref(false);
 
 onBeforeMount(() => {
 
@@ -57,7 +57,7 @@ onBeforeMount(() => {
 		navigator.geolocation.getCurrentPosition(async (position) => {
 			coords.lat = position.coords.latitude.toFixed(4)
 			coords.lon = position.coords.longitude.toFixed(4)
-			hasCoords.value = true
+			console.log({ ...coords });
 		}, error => {
 			console.log(error);
 		})

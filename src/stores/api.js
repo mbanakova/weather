@@ -23,7 +23,6 @@ export const useApiStore = defineStore('api', () => {
   // }
 
   const getData = async (lat, lon) => {
-
     try {
       const { data } = await axios(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=ru&appid=${APIKEY}`)
       apiData.value = data

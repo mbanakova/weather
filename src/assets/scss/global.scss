@@ -44,6 +44,10 @@ h6 {
 	padding: 30px;
 	border-radius: 6px;
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+
+	@media (max-width: 767px) {
+		flex-direction: column;
+	}
 }
 
 .weather__left {
@@ -103,5 +107,22 @@ h6 {
 	gap: 20px;
 	color: white;
 	background-image: linear-gradient(to right, rgb(255, 132, 0), rgb(6, 6, 93));
-border-radius: 6px;
+	border-radius: 6px;
+}
+
+.button {
+	display: block;
+	padding: 15px 25px;
+	background-color: #257e93;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	align-self: center;
+	cursor: pointer;
+	transition: 0.3s ease-in-out all;
+
+	&:hover {
+		background-color: darken(#257e93, 10%);
+	}
 }
