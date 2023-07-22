@@ -1,0 +1,22 @@
+.precipitations__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  & li {
+    padding-left: 15px;
+    position: relative;
+    margin-top: 5px;
+
+    &::before {
+      position: absolute;
+      content: "";
+      width: 4px;
+      height: 4px;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+      background-color: rgb(40, 166, 212);
+    }
+  }
+}

@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		<p class="boforth__points">
-			<span class="points" :style="`background-color:${boforth.color2}`">{{ boforth.points }}</span> балла по шкале Бофорта
+			<span class="points" :style="`background-color:${boforth.color2}`">{{ boforth.points }}</span> {{ pointsEnding(boforth.points) }} по шкале Бофорта
 		</p>
 		<div class="boforth__bar">
 			<div class="boforth__level" :style="`width:${(boforth.points / 12) * 100}%;background-image: repeating-linear-gradient(-60deg, ${boforth.color}, ${boforth.color} 10px, ${boforth.color2} 10px, ${boforth.color2} 20px);`"></div>
@@ -47,92 +47,21 @@ const directions = {
 	337.5: "ССЗ",
 };
 
-function getDirection(deg) {
+const getDirection = (deg) => {
 	const degree = Math.round(deg / 22.5) * 22.5;
 	return directions[degree];
 }
+
+const pointsEnding = (points) => {
+	switch (points) {
+		case 1:
+			return 'балл'
+		case 2:
+		case 3:
+		case 4:
+			return 'балла'
+		default:
+			return 'баллов'
+	}
+}
 </script>
-
-<style lang="scss" scoped>
-.wind__top {
-	display: grid;
-	grid-template-columns: 1fr 140px;
-	column-gap: 20px;
-	grid-template-areas:
-		"title img"
-		"speed img"
-		"direction img";
-}
-
-.wind__speed {
-	display: flex;
-	align-items: center;
-	flex-shrink: 1;
-	gap: 10px;
-	grid-area: speed;
-}
-
-.wind__direction {
-	position: relative;
-	padding-right: 30px;
-	grid-area: direction;
-	justify-self: start;
-	align-self: start;
-}
-
-.wind__arrow {
-	position: absolute;
-	content: "";
-	top: 50%;
-	right: -5px;
-	width: 25px;
-	height: 25px;
-	transform-origin: center;
-	fill: #9611c6;
-}
-
-.wind__img {
-	flex-shrink: 0;
-	grid-area: img;
-}
-
-.boforth {
-	max-width: 450px;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-}
-
-.boforth__bar {
-	width: 100%;
-	height: 40px;
-	background-color: #d8ecf3;
-	position: relative;
-	border-radius: 6px;
-}
-
-.boforth__level {
-	background-image: repeating-linear-gradient(-60deg, #e29804, #e29804 10px, orange 10px, orange 20px);
-	height: 40px;
-	width: 0;
-	position: absolute;
-	top: 0;
-	left: 0;
-	border-radius: 6px;
-}
-
-.boforth__points {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-
-.points {
-	font-size: 30px;
-	font-weight: 700;
-	padding: 10px;
-	border-radius: 6px;
-	color: white;
-}
-</style>

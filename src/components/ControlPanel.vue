@@ -22,34 +22,3 @@ const getCoords = () => {
   emit('getUserCoords')
 }
 </script>
-
-<style scoped lang="scss">
-.control-panel {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  padding: 20px 30px;
-}
-
-.search {
-  max-width: 400px;
-  width: 100%;
-}
-
-.input {
-  background-color: #fff;
-  border: 2px solid #dfdfdf;
-  outline: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  width: 100%;
-  transition: 0.3s all ease-in-out;
-}
-
-.input:focus {
-  border-color: #8eb6be;
-  background-color: #edf7f8;
-}
-</style>

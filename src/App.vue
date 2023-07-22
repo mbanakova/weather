@@ -2,12 +2,10 @@
 	<TheHeader />
 	<main class="main wrapper">
 		<ControlPanel @user-submit="getWeatherByCityName" @getUserCoords="getCoords" />
-		<!-- <pre>{{ data.value.timezone }}</pre> -->
-		<div class="weather shadow">
-			<div class="weather__left" v-if="data.value">
+		<div class="weather shadow" v-if="data.value">
+			<div class="weather__left">
 				<div class="weather-header">
 					<h3 class="city">{{ data.value.name }}, {{ data.value.sys.country }}</h3>
-					<!-- <p class="time">Сейчас {{ timeNow }},<br>часовой пояс {{ Intl.DateTimeFormat().resolvedOptions().timeZone }}</p> -->
 					<p class="time">Местное время: {{ localTime(data.value.dt, data.value.timezone) }},<br>Часовой пояс: GMT {{ getGMT(data.value.timezone) }}</p>
 				</div>
 				<div class="weather-main">
@@ -19,7 +17,8 @@
 					</div>
 				</div>
 				<Rain v-if="data.value.rain" :rain="data.value.rain" />
-				<Snow v-if="data.value.snow" :snow="data.value.snow" />
+				<Precipitations v-if="data.value.snow" :snow="data.value.snow" :type="precipitations.snow" />
+				<Precipitations v-if="data.value.rain" :snow="data.value.rain" :type="precipitations.rain" />
 				<div class="weather-info">
 					<p class="humidity">Влажность: {{ data.value.main.humidity }}%</p>
 					<p class="air-pressure">Давление: {{ airPressure }} мм рт. ст.</p>
@@ -28,21 +27,22 @@
 				</div>
 				<div class="daylight">
 					<div class="sunrize">Восход {{ localTime(data.value.sys.sunrise, data.value.timezone) }}</div>
-
 					<div class="sunset">Закат {{ localTime(data.value.sys.sunset, data.value.timezone) }}</div>
 				</div>
 			</div>
 			<BoforthScale v-if="boforth.value" :boforth="boforth.value" :wind="data.value.wind" />
 		</div>
+		<WeatherSkeleton v-else />
+
 	</main>
 </template>
 <script setup>
 import TheHeader from "./components/TheHeader.vue";
-import Rain from "./components/Rain.vue";
-import Snow from "./components/Snow.vue";
+import Precipitations from "./components/Precipitations.vue";
 import BoforthScale from "./components/BoforthScale.vue";
 import ControlPanel from "./components/ControlPanel.vue";
-import { ref, reactive, computed, onMounted } from "vue";
+import WeatherSkeleton from "./components/WeatherSkeleton.vue";
+import { ref, reactive, onMounted } from "vue";
 import { useBoforthStore } from "./stores/boforth.js";
 import { useApiStore } from "./stores/api.js";
 const boforthStore = useBoforthStore();
@@ -53,6 +53,11 @@ const windSpeed = ref(0);
 const boforth = reactive({});
 const airPressure = ref(null)
 const coords = reactive({ lat: 36.17497, lon: -115.13722 }) //Las Vegas
+
+const precipitations = {
+	rain: 'дождя',
+	snow: 'снега'
+}
 
 onMounted(async () => {
 	await apiStore.getDataByCoords(coords.lat, coords.lon);
