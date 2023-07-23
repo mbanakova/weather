@@ -6,7 +6,7 @@
 .header__wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   gap: 10px;
 }
 
@@ -16,4 +16,12 @@
   visibility: hidden;
   width: 0;
   height: 0;
+}
+
+.header__link {
+  max-width: 90px;
+}
+
+.header__warning {
+  font-size: 12px;
 }

@@ -30,12 +30,22 @@
   align-items: center;
   justify-content: flex-start;
   gap: 20px;
+
+  @media (max-width: $mobile) {
+    gap: 10px;
+  }
 }
 
 .temperature {
   font-size: 50px;
+  line-height: 50px;
   font-weight: 700;
   color: $grey;
+
+  @media (max-width: $mobile) {
+    font-size: 40px;
+    line-height: 40px;
+  }
 }
 
 .feels-wrapper {
@@ -47,6 +57,12 @@
 
 .img {
   grid-area: img;
+  max-width: 100px;
+
+  @media (max-width: $mobile) {
+    max-width: 80px;
+  }
+
 }
 
 .sky {

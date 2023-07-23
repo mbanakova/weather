@@ -5,6 +5,13 @@
   gap: 20px;
   width: 100%;
   padding: 20px 30px;
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    padding: 20px;
+    max-width: 510px;
+    align-items: stretch;
+  }
 }
 
 .search {
@@ -12,17 +19,43 @@
   width: 100%;
 }
 
-.input {
+.select,
+.search {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+
+}
+
+.input,
+select {
   background-color: $white;
   border: 2px solid $border;
   outline: none;
+  font-size: 13px;
   padding: 10px 15px;
   border-radius: 6px;
   width: 100%;
+  height: 100%;
   transition: $tr;
+}
+
+.input::placeholder {
+  color: $light;
 }
 
 .input:focus {
   border-color: #84bac5;
   background-color: $focus;
+}
+
+.label {
+  font-size: 11px;
+  margin-bottom: 5px;
+  background-color: $accent;
+  color: $white;
+  padding: 3px 10px;
+  border-top-left-radius: 6px;
+  border-radius: 6px;
 }

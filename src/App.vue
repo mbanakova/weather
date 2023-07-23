@@ -1,7 +1,7 @@
 <template>
 	<TheHeader />
 	<main class="main wrapper">
-		<ControlPanel @user-submit="getWeatherByCityName" @getUserCoords="getCoords" />
+		<ControlPanel @user-submit="getWeatherByCityName" @getUserCoords="getCoords" @user-select="getWeatherByCityName" />
 		<div class="weather shadow" v-if="data.value">
 			<div class="weather__left">
 				<div class="weather-header">
